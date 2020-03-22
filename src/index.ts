@@ -4,6 +4,7 @@ import { lettersCommand } from "./letters";
 import { numbersCommand } from "./numbers";
 import { potCommand } from "./pot";
 import { solveNumbersCommand } from "./solve";
+import { secretSantaCommand } from "./secretsanta";
 dotenv.config();
 
 const client = new Discord.Client();
@@ -95,6 +96,7 @@ client.on("message", message => {
 });
 
 registerCommand(potCommand());
+registerCommand(secretSantaCommand());
 registerCommand(numbersCommand);
 registerCommand(lettersCommand);
 registerCommand(solveNumbersCommand);
