@@ -12,7 +12,8 @@ client.once("ready", () => {
   console.log("Ready!");
 });
 
-const PREFIX = process.env.COMMAND_PREFIX || "!gb";
+export const PREFIX = process.env.COMMAND_PREFIX || "!gb";
+
 const MAX_COMMAND_LENGTH =
   parseInt(process.env.MAX_COMMAND_LENGTH || "") || 255;
 
@@ -27,6 +28,8 @@ export interface Command {
   shortDescription: string;
   longDescription?: string;
 }
+/** `LazyCommand` is used when you need runtime reflection of documentation, e.g. using `PREFIX` in the returned `Command`. */
+export type LazyCommand = () => Command;
 
 let commandMap: { [name: string]: Command | undefined } = {};
 
@@ -91,7 +94,7 @@ client.on("message", message => {
   }
 });
 
-registerCommand(potCommand);
+registerCommand(potCommand());
 registerCommand(numbersCommand);
 registerCommand(lettersCommand);
 registerCommand(solveNumbersCommand);
