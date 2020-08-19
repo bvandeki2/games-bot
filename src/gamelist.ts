@@ -1,7 +1,7 @@
 import { Chance } from "chance";
 import { Command, GameDescription } from ".";
 import { Sequelize } from "sequelize";
-import { Message } from "discord.js";
+import { Message, MessageEmbed } from "discord.js";
 
 const chance = new Chance();
 
@@ -28,7 +28,7 @@ export const listGames: Command = {
     
     GameDescription.findAll().then((games) => {
       const allDescs = games.map((model) => `${(model as any).id}: ${(model as any).gameDescription}`);
-      message?.channel?.send(allDescs.join('\n'));
+      message?.channel?.send(new MessageEmbed().setDescription(allDescs.join('\n')));
     });
   }
 };
