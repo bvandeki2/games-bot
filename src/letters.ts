@@ -1,15 +1,21 @@
 import { Chance } from 'chance';
-import { Command } from '.';
+import { Message, PartialMessage } from 'discord.js';
+import { Command } from './command';
 
 const chance = new Chance();
 
 const cons = [...'NNNNNNRRRRRRTTTTTTLLLLSSSSDDDDGGGBBCCMMPPFFHHVVWWYYKJXQZ'];
 const vows = [...'EEEEEEEEEEEEAAAAAAAAAIIIIIIIIIOOOOOOOOUUUU'];
 
-export const lettersCommand: Command = {
-  name: 'countdown-letters',
-  shortDescription: 'Generate random letters for playing a game of Countdown',
-  handler: (arg, message) => {
+export class LettersCommand extends Command {
+  public name() {
+    return 'countdown-letters';
+  }
+  public shortDescription() {
+    return 'Generate random letters for playing a game of Countdown';
+  }
+
+  public handler(arg: string, message: Message | PartialMessage) {
     const args = arg.split(' ');
 
     let vowelCount = 4;
@@ -49,5 +55,5 @@ export const lettersCommand: Command = {
     }
 
     message.channel?.send(chance.shuffle([...s]).join(''));
-  },
-};
+  }
+}

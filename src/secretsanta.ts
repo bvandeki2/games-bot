@@ -1,25 +1,31 @@
 import { Chance } from 'chance';
-import { User, DMChannel } from 'discord.js';
-import { LazyCommand, PREFIX } from '.';
+import { User, DMChannel, Message, PartialMessage } from 'discord.js';
+import { Command } from './command';
 
 const chance = new Chance();
 
 let entrants: { [author: string]: DMChannel } = {};
 
-const NAME = 'secret-santa';
+export class SecretSantaCommand extends Command {
+  public name() {
+    return 'secret-santa';
+  }
+  public shortDescription() {
+    return 'Generate private user derangements, e.g. for secret santa';
+  }
 
-export const secretSantaCommand: LazyCommand = () => ({
-  name: NAME,
-  shortDescription: 'Generate private user derangements, e.g. for secret santa',
-  longDescription: `
+  public longDescription(prefix: string) {
+    return `
 In secret santa, we want to avoid a person giving themselves a gift - i.e., we want a derangement. This command generates this privately.
 
 Examples:
 
-DM: \`${PREFIX} ${NAME}\`: register for this secret santa
-Non-DM channel: \`${PREFIX} ${NAME}\`: finish the secret santa; everyone gets assigned to others privately.
-  `,
-  handler: (arg, message) => {
+DM: \`${prefix} yourname\`: register for this secret santa
+Non-DM channel: \`${prefix} yourname\`: finish the secret santa; everyone gets assigned to others privately.
+`;
+  }
+
+  public handler(arg: string, message: Message | PartialMessage) {
     switch (message.channel?.type) {
       case 'text':
         let tags = Object.keys(entrants);
@@ -68,5 +74,5 @@ Non-DM channel: \`${PREFIX} ${NAME}\`: finish the secret santa; everyone gets as
       default:
         throw new Error('Channel is neither text or DM');
     }
-  },
-});
+  }
+}

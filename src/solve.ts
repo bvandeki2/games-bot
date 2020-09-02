@@ -1,5 +1,6 @@
-import { Command } from '.';
+import { Command } from './command';
 import { Chance } from 'chance';
+import { Message, PartialMessage } from 'discord.js';
 const chance = new Chance();
 
 const ops = ['+', '-', '*', '/'];
@@ -78,10 +79,15 @@ async function computeCountdownSols(
   return sols;
 }
 
-export const solveNumbersCommand: Command = {
-  name: 'solve-numbers',
-  shortDescription: 'Solve the countdown numbers puzzle numerically',
-  handler: async (arg, message) => {
+export class SolveNumbersCommand extends Command {
+  public name() {
+    return 'solve-numbers';
+  }
+  public shortDescription() {
+    return 'Solve the countdown numbers puzzle numerically';
+  }
+
+  public async handler(arg: string, message: Message | PartialMessage) {
     const args = arg.trim().replace(/, +/g, ',').split(' ');
 
     let all_numbers = null;
@@ -142,5 +148,5 @@ export const solveNumbersCommand: Command = {
     }
 
     message.channel?.send(`${closest} = ${sols[closest]}`);
-  },
-};
+  }
+}
