@@ -1,16 +1,16 @@
-import { Chance } from "chance";
-import { User, DMChannel } from "discord.js";
-import { LazyCommand, PREFIX } from ".";
+import { Chance } from 'chance';
+import { User, DMChannel } from 'discord.js';
+import { LazyCommand, PREFIX } from '.';
 
 const chance = new Chance();
 
 let entrants: { [author: string]: DMChannel } = {};
 
-const NAME = "secret-santa";
+const NAME = 'secret-santa';
 
 export const secretSantaCommand: LazyCommand = () => ({
   name: NAME,
-  shortDescription: "Generate private user derangements, e.g. for secret santa",
+  shortDescription: 'Generate private user derangements, e.g. for secret santa',
   longDescription: `
 In secret santa, we want to avoid a person giving themselves a gift - i.e., we want a derangement. This command generates this privately.
 
@@ -21,10 +21,12 @@ Non-DM channel: \`${PREFIX} ${NAME}\`: finish the secret santa; everyone gets as
   `,
   handler: (arg, message) => {
     switch (message.channel?.type) {
-      case "text":
+      case 'text':
         let tags = Object.keys(entrants);
         if (tags.length < 2) {
-          message.channel.send("Need at least two people to do a secret santa!");
+          message.channel.send(
+            'Need at least two people to do a secret santa!'
+          );
           return;
         }
         let derangement = tags.map((_, i) => i);
@@ -32,10 +34,10 @@ Non-DM channel: \`${PREFIX} ${NAME}\`: finish the secret santa; everyone gets as
         // Derangement ~37% = 1/e density, so just do rejection sampling
         let it = 0;
         while (!isDerangement && it < 100) {
-          it ++;
+          it++;
           derangement = chance.shuffle(derangement);
           isDerangement = true;
-          for(let i = 0; i < derangement.length; i ++) {
+          for (let i = 0; i < derangement.length; i++) {
             if (derangement[i] == i) {
               isDerangement = false;
               break;
@@ -44,7 +46,9 @@ Non-DM channel: \`${PREFIX} ${NAME}\`: finish the secret santa; everyone gets as
         }
 
         if (!isDerangement) {
-          message.channel.send("Failed to generate a derangement after 100 tries");
+          message.channel.send(
+            'Failed to generate a derangement after 100 tries'
+          );
           return;
         }
 
@@ -55,12 +59,14 @@ Non-DM channel: \`${PREFIX} ${NAME}\`: finish the secret santa; everyone gets as
         entrants = {};
 
         return;
-      case "dm":
+      case 'dm':
         entrants[`${(message.author as User).id}`] = message.channel;
-        message.channel.send(`Alright <@!${(message.author as User).id}>, you are entered!`);
+        message.channel.send(
+          `Alright <@!${(message.author as User).id}>, you are entered!`
+        );
         return;
       default:
-        throw new Error("Channel is neither text or DM");
+        throw new Error('Channel is neither text or DM');
     }
-  }
+  },
 });

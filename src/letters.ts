@@ -1,16 +1,16 @@
-import { Chance } from "chance";
-import { Command } from ".";
+import { Chance } from 'chance';
+import { Command } from '.';
 
 const chance = new Chance();
 
-const cons = [..."NNNNNNRRRRRRTTTTTTLLLLSSSSDDDDGGGBBCCMMPPFFHHVVWWYYKJXQZ"];
-const vows = [..."EEEEEEEEEEEEAAAAAAAAAIIIIIIIIIOOOOOOOOUUUU"];
+const cons = [...'NNNNNNRRRRRRTTTTTTLLLLSSSSDDDDGGGBBCCMMPPFFHHVVWWYYKJXQZ'];
+const vows = [...'EEEEEEEEEEEEAAAAAAAAAIIIIIIIIIOOOOOOOOUUUU'];
 
 export const lettersCommand: Command = {
-  name: "countdown-letters",
-  shortDescription: "Generate random letters for playing a game of Countdown",
+  name: 'countdown-letters',
+  shortDescription: 'Generate random letters for playing a game of Countdown',
   handler: (arg, message) => {
-    const args = arg.split(" ");
+    const args = arg.split(' ');
 
     let vowelCount = 4;
     let consonantCount = 5;
@@ -19,14 +19,14 @@ export const lettersCommand: Command = {
       const command = (args.shift() as string).toLowerCase();
       const param = (args.shift() as string).toLowerCase();
 
-      if (command.trim() === "") continue;
-      if (command === "-v") {
+      if (command.trim() === '') continue;
+      if (command === '-v') {
         const num = parseInt(param);
         if (!isNaN(num) && num >= 0 && num <= 9) {
           vowelCount = num;
           consonantCount = 9 - vowelCount;
         }
-      } else if (command === "-c") {
+      } else if (command === '-c') {
         const num = parseInt(param);
         if (!isNaN(num) && num >= 0 && num <= 9) {
           consonantCount = num;
@@ -38,7 +38,7 @@ export const lettersCommand: Command = {
       }
     }
 
-    let s = "";
+    let s = '';
 
     for (let i = 0; i < vowelCount; i++) {
       s += chance.pickone(vows);
@@ -48,6 +48,6 @@ export const lettersCommand: Command = {
       s += chance.pickone(cons);
     }
 
-    message.channel?.send(chance.shuffle([...s]).join(""));
-  }
+    message.channel?.send(chance.shuffle([...s]).join(''));
+  },
 };
