@@ -1,14 +1,14 @@
-import { Chance } from "chance";
-import { User } from "discord.js";
-import { LazyCommand, PREFIX } from ".";
+import { Chance } from 'chance';
+import { User } from 'discord.js';
+import { LazyCommand, PREFIX } from '.';
 
 const chance = new Chance();
 
 let pot: { [author: string]: string } = {};
 
 export const potCommand: LazyCommand = () => ({
-  name: "pot",
-  shortDescription: "Enter into/draw from a pot for random drawings",
+  name: 'pot',
+  shortDescription: 'Enter into/draw from a pot for random drawings',
   longDescription: `
 The \`pot\` command allows multiple users to put an anonymous message into the "pot" by DMing me.
 This can then be drawn from publicly without revealing anyone's name.
@@ -21,9 +21,9 @@ Non-DM channel: \`${PREFIX} pot -all\`: pull all submissions from the pot (in a 
   `,
   handler: (arg, message) => {
     switch (message.channel?.type) {
-      case "text":
-        const all = arg.trim() === "-all";
-        if (arg !== "" && !all) {
+      case 'text':
+        const all = arg.trim() === '-all';
+        if (arg !== '' && !all) {
           message.channel.send(
             `If you\'re trying to submit to the pot, DM me instead! But if you wanted to draw,  call "${PREFIX} pot" with no extra arguments.`
           );
@@ -32,15 +32,15 @@ Non-DM channel: \`${PREFIX} pot -all\`: pull all submissions from the pot (in a 
         // Select someone at random and show their submission anonymously
         const submitters = Object.keys(pot);
         if (submitters.length === 0) {
-          message.channel.send("The pot is empty.");
+          message.channel.send('The pot is empty.');
           return;
         }
 
         if (all) {
           const allSubmissions = chance
             .shuffle(submitters)
-            .map(s => pot[s])
-            .join("\n");
+            .map((s) => pot[s])
+            .join('\n');
           message.channel.send(
             `Here's what everyone said (in a random order, of course):\n${allSubmissions}`
           );
@@ -52,8 +52,8 @@ Non-DM channel: \`${PREFIX} pot -all\`: pull all submissions from the pot (in a 
         // clear pot for next time
         pot = {};
         return;
-      case "dm":
-        if (arg === "") {
+      case 'dm':
+        if (arg === '') {
           message.channel.send(
             `\`pot\` command requires text to submit, e.g. \`${PREFIX} pot sometext\``
           );
@@ -64,7 +64,7 @@ Non-DM channel: \`${PREFIX} pot -all\`: pull all submissions from the pot (in a 
         message.channel.send(`aight, got it.`);
         return;
       default:
-        throw new Error("Channel is neither text or DM");
+        throw new Error('Channel is neither text or DM');
     }
-  }
+  },
 });
