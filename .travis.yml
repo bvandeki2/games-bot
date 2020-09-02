@@ -1,0 +1,11 @@
+sudo: false
+language: node_js
+arch: 'amd64'
+node_js:
+  - '12'
+  - '13'
+  - '14'
+script:
+  - npx prettier -c .
+  - npx tsc
+# env:
