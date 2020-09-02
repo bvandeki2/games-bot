@@ -1,5 +1,6 @@
 import { Chance } from 'chance';
-import { Command } from '.';
+import { Message, PartialMessage } from 'discord.js';
+import { Command } from './command';
 
 const chance = new Chance();
 
@@ -27,10 +28,15 @@ const smallnums = [
   10,
 ];
 
-export const numbersCommand: Command = {
-  name: 'countdown-numbers',
-  shortDescription: 'Generate random numbers for playing a game of Countdown',
-  handler: (arg, message) => {
+export class NumbersCommand extends Command {
+  public name() {
+    return 'countdown-numbers';
+  }
+  public shortDescription() {
+    return 'Generate random numbers for playing a game of Countdown';
+  }
+
+  public handler(arg: string, message: Message | PartialMessage) {
     const args = arg.trim().split(' ');
 
     let bigCount = 2;
@@ -72,5 +78,5 @@ export const numbersCommand: Command = {
     message.channel?.send(
       `Goal: ${target}    Numbers: ${allNumbers.join(', ')}`
     );
-  },
-};
+  }
+}
